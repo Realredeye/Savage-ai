@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAVAGEBOT | 3D Roast Master</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #ff0033; /* Savage Red */
+            --cyan: #00f2ff;
+            --glass: rgba(10, 10, 10, 0.7);
+            --glass-border: rgba(255, 0, 51, 0.2);
+            --text-main: #ffffff;
+            --text-dim: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2000px;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 51, 0.1) 0%, transparent 80%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+        }
+
+        .scene {
+            width: 90%;
+            max-width: 550px;
+            height: 650px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-3d {
+            width: 100%;
+            height: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border: 2px solid var(--glass-border);
+            border-radius: 40px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            box-shadow: 0 40px 100px rgba(255, 0, 51, 0.1);
+        }
+
+        .card-3d.shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .content-3d { transform: translateZ(80px); height: 100%; display: flex; flex-direction: column; }
+
+        .header { text-align: center; margin-bottom: 30px; transform: translateZ(50px); }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 900;
+            font-size: 2.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            text-shadow: 0 0 20px rgba(255, 0, 51, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 700;
+        }
+
+        .input-area {
+            margin-bottom: 30px;
+            transform: translateZ(40px);
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px 25px;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 51, 0.2);
+        }
+
+        .roast-display {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            border: 1px dashed rgba(255, 0, 51, 0.3);
+            transform: translateZ(30px);
+            position: relative;
+        }
+
+        #roast-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #fff;
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: 900;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            transform: translateZ(60px);
+            font-size: 1.1rem;
+        }
+
+        button:hover {
+            transform: translateZ(90px) scale(1.05);
+            filter: brightness(1.2);
+            box-shadow: 0 15px 30px rgba(255, 0, 51, 0.4);
+        }
+
+        .glitch-overlay {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, rgba(255,0,0,0.03) 0px, rgba(255,0,0,0.03) 1px, transparent 1px, transparent 2px);
+            pointer-events: none;
+            border-radius: 40px;
+        }
+
+        .skull-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(-50px);
+            font-size: 15rem;
+            opacity: 0.03;
+            pointer-events: none;
+            filter: grayscale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="skull-bg">☠️</div>
+    <div class="scene">
+        <div class="card-3d" id="main-card">
+            <div class="glitch-overlay"></div>
+            <div class="content-3d">
+                <div class="header">
+                    <h1>SavageBot</h1>
+                    <p class="tagline">Cyber-Vibes • Sarcasm Level: 100</p>
+                </div>
+
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Ask for a roast (if you dare)..." autocomplete="off">
+                </div>
+
+                <div class="roast-display">
+                    <p id="roast-text">Aukat hai toh kuch puch ke dikha.</p>
+                </div>
+
+                <button onclick="getRoast()">Submit for Destruction</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('main-card');
+        const roastText = document.getElementById('roast-text');
+        const userInput = document.getElementById('user-input');
+
+        const roasts = {
+            default: [
+                "Bhai, seriously? Ye poochne se pehle thoda logic ghar pe bhool aaya kya?",
+                "Wah genius, kya talent hai yaar... tatti jaisa!",
+                "Bruh, tu rehne de. Tere bas ka sirf saans lena hai, wo bhi mushkil se.",
+                "Shauk toh billionaire waale hain, par harkatein 'bhikhari' level ki.",
+                "Pehle apni shakal mirror mein dekh, phir gyaan baantna.",
+                "Itna confidence kahan se lata hai? NASA ko tujhe study karna chahiye.",
+                "Tera system error dikha raha hai, dimaag ki RAM badhwa le.",
+                "Tu insaan hai ya bas carbon dioxide waste kar raha hai?",
+                "Gandu hai tu, tujhse na ho payega. Try again in next life.",
+                "Jhaat ke baal, tera opinion kisne pucha? Chup reh."
+            ],
+            rich: "Bro pehle ek dhang ki naukri dhoond, phir billionaire banne ke sapne dekh. Budget tera 10 rupaye ka hai aur baatein crores ki?",
+            smart: "Smart? Bhai tu toh Google ko bhi confuse kar dega apni stupidity se. 2+2 ke liye bhi tu calculator dhoondta hai.",
+            gym: "Gym jaane se pehle zara fridge se breakup karle. Muscle nahi, sirf charbi badh rahi hai teri.",
+            famous: "Famous? Haan, 'Most Confused Human Alive' ka award tujhe hi milega. NASA wale line mein khade hain tujhe pakadne ke liye.",
+            look: "Mirror hai tere paas? Nahi toh mera screen dekh le, usme teri 'extra ordinary' ugly face dikh rahi hai. Bruh!",
+            career: "Tera career toh waisa hi hai jaisa mere system ka 'Recycle Bin'—hamesha khali aur be-kaami!",
+            love: "Relationship? Bhai, tujhe toh 'Terms and Conditions' bhi accept nahi karte. Akela hi marega tu.",
+            stupid: "Seriously? Ye sawaal sun ke mera processor garam ho gaya. Kitna girayega level, bhai?"
+        };
+
+        const followUps = [
+            "Aur kuch mahan baat bolni hai?",
+            "Wah, kya logic hai!",
+            "Next joke sunao, ye wala flop tha.",
+            "Bhai kya kar raha hai tu?",
+            "Dimag ghar pe bhool aaya kya?"
+        ];
+
+        // 3D Tilt Logic
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        function getRoast() {
+            const query = userInput.value.toLowerCase();
+            if (!query.trim()) {
+                roastText.innerText = "Kuch likh toh sahi, gadhe!";
+                return;
+            }
+
+            // Shake animation
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 500);
+
+            let selectedRoast = "";
+
+            if (query.length < 5) {
+                selectedRoast = roasts.stupid;
+            } else if (query.includes("rich") || query.includes("paisa") || query.includes("money")) {
+                selectedRoast = roasts.rich;
+            } else if (query.includes("smart") || query.includes("intelligent") || query.includes("dimaag")) {
+                selectedRoast = roasts.smart;
+            } else if (query.includes("gym") || query.includes("body") || query.includes("fit")) {
+                selectedRoast = roasts.gym;
+            } else if (query.includes("famous") || query.includes("star")) {
+                selectedRoast = roasts.famous;
+            } else if (query.includes("look") || query.includes("smart") || query.includes("handsome") || query.includes("beautiful")) {
+                selectedRoast = roasts.look;
+            } else if (query.includes("career") || query.includes("job") || query.includes("work")) {
+                selectedRoast = roasts.career;
+            } else if (query.includes("love") || query.includes("gf") || query.includes("bf") || query.includes("relationship")) {
+                selectedRoast = roasts.love;
+            } else {
+                selectedRoast = roasts.default[Math.floor(Math.random() * roasts.default.length)];
+            }
+
+            // Randomly add a sarcastic follow-up
+            if (Math.random() > 0.6) {
+                const followUp = followUps[Math.floor(Math.random() * followUps.length)];
+                selectedRoast += " <br><br> <span style='color:var(--cyan); font-size: 0.9rem;'> " + followUp + "</span>";
+            }
+
+            roastText.style.opacity = 0;
+            setTimeout(() => {
+                roastText.innerText = selectedRoast;
+                roastText.style.opacity = 1;
+            }, 100);
+
+            userInput.value = "";
+        }
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') getRoast();
+        });
+    </script>
+</body>
+</html>
+
+
